@@ -13,13 +13,15 @@ use pocketmine\player\Player;
 
 class CrateCommand extends BaseCommand
 {
-    /** @var PiggyCrates */
-    protected $plugin;
+    public function getPermission(): string
+    {
+        return "piggycrates.command.crate";
+    }
 
     public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
     {
         if (!$sender instanceof Player) {
-            $sender->sendMessage($this->plugin->getMessage("commands.use-in-game"));
+            $sender->sendMessage(PiggyCrates::getInstance()->getMessage("commands.use-in-game"));
             return;
         }
         if (!isset($args["type"])) {
@@ -27,21 +29,21 @@ class CrateCommand extends BaseCommand
             return;
         }
         if ($args["type"] === "cancel") {
-            if (!$this->plugin->inCrateCreationMode($sender)) {
-                $sender->sendMessage($this->plugin->getMessage("commands.crate.creation-mode.not-in-mode"));
+            if (!PiggyCrates::getInstance()->inCrateCreationMode($sender)) {
+                $sender->sendMessage(PiggyCrates::getInstance()->getMessage("commands.crate.creation-mode.not-in-mode"));
                 return;
             }
-            $this->plugin->setInCrateCreationMode($sender, null);
-            $sender->sendMessage($this->plugin->getMessage("commands.crate.creation-mode.cancelled"));
+            PiggyCrates::getInstance()->setInCrateCreationMode($sender, null);
+            $sender->sendMessage(PiggyCrates::getInstance()->getMessage("commands.crate.creation-mode.cancelled"));
             return;
         }
-        $crate = $this->plugin->getCrate($args["type"]);
+        $crate = PiggyCrates::getInstance()->getCrate($args["type"]);
         if ($crate === null) {
-            $sender->sendMessage($this->plugin->getMessage("commands.crate.error.invalid-crate"));
+            $sender->sendMessage(PiggyCrates::getInstance()->getMessage("commands.crate.error.invalid-crate"));
             return;
         }
-        $this->plugin->setInCrateCreationMode($sender, $crate);
-        $sender->sendMessage($this->plugin->getMessage("commands.crate.success"));
+        PiggyCrates::getInstance()->setInCrateCreationMode($sender, $crate);
+        $sender->sendMessage(PiggyCrates::getInstance()->getMessage("commands.crate.success"));
     }
 
     /**

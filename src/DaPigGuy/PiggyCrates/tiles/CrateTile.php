@@ -136,7 +136,7 @@ class CrateTile extends Chest
         foreach ($this->floatingTextParticles as $key => $particle) {
             $player = Server::getInstance()->getPlayerExact($key);
             $particle->setInvisible();
-            if ($player !== null) $player->getWorld()->addParticle($this->getPosition(), $particle, [$player]);
+            $player?->getWorld()->addParticle($this->getPosition(), $particle, [$player]);
         }
         unset(PiggyCrates::getInstance()->crateTiles[array_search($this, PiggyCrates::getInstance()->crateTiles)]);
         parent::close();

@@ -6,7 +6,9 @@ namespace DaPigGuy\PiggyCrates\crates;
 
 use DaPigGuy\PiggyCrates\PiggyCrates;
 use pocketmine\item\Item;
-use pocketmine\item\ItemFactory;
+use pocketmine\item\LegacyStringToItemParser;
+use pocketmine\item\LegacyStringToItemParserException;
+use pocketmine\item\StringToItemParser;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\player\Player;
 
@@ -72,7 +74,22 @@ class Crate
 
     public function giveKey(Player $player, int $amount): void
     {
-        $key = ItemFactory::getInstance()->get((int)$this->plugin->getConfig()->getNested("keys.id"), (int)$this->plugin->getConfig()->getNested("keys.meta"), $amount);
+        $id = $this->plugin->getConfig()->getNested("keys.id");
+        $meta = $this->plugin->getConfig()->getNested("keys.meta");
+        $key = null;
+        if (is_int($id) and is_int($meta)) {
+            try {
+                $key = LegacyStringToItemParser::getInstance()->parse($id . ":" . $meta)->setCount($amount);
+            } catch (LegacyStringToItemParserException $e) {
+                PiggyCrates::getInstance()->getLogger()->error($e->getMessage());
+            }
+        } elseif (is_string($id) and is_string($meta)) {
+            try {
+                $key = StringToItemParser::getInstance()->parse($id . ":" . $meta)->setCount($amount);
+            } catch (LegacyStringToItemParserException $e) {
+                PiggyCrates::getInstance()->getLogger()->error($e->getMessage());
+            }
+        }
         $key->setCustomName(ucfirst(str_replace("{CRATE}", $this->getName(), $this->plugin->getConfig()->getNested("keys.name"))));
         $key->setLore([str_replace("{CRATE}", $this->getName(), $this->plugin->getConfig()->getNested("keys.lore"))]);
         $key->getNamedTag()->setString("KeyType", $this->getName());
@@ -81,9 +98,7 @@ class Crate
 
     public function isValidKey(Item $item): bool
     {
-        return $item->getId() === (int)$this->plugin->getConfig()->getNested("keys.id") &&
-            $item->getMeta() === (int)$this->plugin->getConfig()->getNested("keys.meta") &&
-            ($keyTypeTag = $item->getNamedTag()->getTag("KeyType")) instanceof StringTag &&
+        return ($keyTypeTag = $item->getNamedTag()->getTag("KeyType")) instanceof StringTag &&
             $keyTypeTag->getValue() === $this->getName();
     }
 }

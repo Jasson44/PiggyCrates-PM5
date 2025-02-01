@@ -10,9 +10,8 @@ use DaPigGuy\PiggyCrates\PiggyCrates;
 use DaPigGuy\PiggyCrates\tiles\CrateTile;
 use muqsit\invmenu\InvMenu;
 use muqsit\invmenu\type\InvMenuTypeIds;
+use pocketmine\block\VanillaBlocks;
 use pocketmine\console\ConsoleCommandSender;
-use pocketmine\item\ItemFactory;
-use pocketmine\item\ItemIds;
 use pocketmine\player\Player;
 use pocketmine\scheduler\Task;
 use pocketmine\utils\TextFormat;
@@ -47,7 +46,7 @@ class RouletteTask extends Task
 
         $this->menu = InvMenu::create(InvMenuTypeIds::TYPE_CHEST);
         $this->menu->setName(PiggyCrates::getInstance()->getMessage("crates.menu-name", ["{CRATE}" => $crate->getName()]));
-        $this->menu->getInventory()->setContents([4 => ($endRod = ItemFactory::getInstance()->get(ItemIds::END_ROD)->setCustomName(TextFormat::ITALIC)), 22 => $endRod]);
+        $this->menu->getInventory()->setContents([4 => ($endRod = VanillaBlocks::END_ROD()->asItem()->setCustomName(TextFormat::ITALIC)), 22 => $endRod]);
         $this->menu->setListener(InvMenu::readonly());
         $this->menu->send($player);
 
@@ -63,7 +62,7 @@ class RouletteTask extends Task
         }
         $this->currentTick++;
         $speed = PiggyCrates::getInstance()->getConfig()->getNested("crates.roulette.speed");
-        $safeSpeed = $speed >= 1 ? $speed : 1;
+        $safeSpeed = max($speed, 1);
         $duration = PiggyCrates::getInstance()->getConfig()->getNested("crates.roulette.duration");
         $safeDuration = (($duration / $safeSpeed) >= 5.5) ? $duration : (5.5 * $safeSpeed);
         if ($this->currentTick >= $safeDuration) {

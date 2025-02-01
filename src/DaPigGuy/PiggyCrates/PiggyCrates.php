@@ -22,7 +22,9 @@ use muqsit\invmenu\InvMenuHandler;
 use pocketmine\block\tile\TileFactory;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\enchantment\StringToEnchantmentParser;
-use pocketmine\item\ItemFactory;
+use pocketmine\item\LegacyStringToItemParser;
+use pocketmine\item\LegacyStringToItemParserException;
+use pocketmine\item\StringToItemParser;
 use pocketmine\nbt\JsonNbtParser;
 use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
@@ -84,11 +86,32 @@ class PiggyCrates extends PluginBase
                 if (isset($itemData["nbt"])) {
                     try {
                         $tags = JsonNbtParser::parseJson($itemData["nbt"]);
-                    } catch (Exception $e) {
+                    } catch (Exception) {
                         $this->getLogger()->warning("Invalid crate item NBT supplied in crate type " . $crateName . ".");
                     }
                 }
-                $item = ItemFactory::getInstance()->get($itemData["id"], $itemData["meta"], $itemData["amount"], $tags);
+                $item = null;
+                if (is_int($itemData['id']) && is_int($itemData['meta'])) {
+                    try {
+                        if ($tags !== null) {
+                            $item = LegacyStringToItemParser::getInstance()->parse($itemData['id'] . ":" . $itemData['meta'])->setNamedTag($tags);
+                        } else {
+                            $item = LegacyStringToItemParser::getInstance()->parse($itemData['id'] . ":" . $itemData['meta']);
+                        }
+                    } catch (LegacyStringToItemParserException $e) {
+                        $this->getLogger()->error($e->getMessage());
+                    }
+                } elseif (is_string($itemData['id']) && is_string($itemData['meta'])) {
+                    try {
+                        if ($tags !== null) {
+                            $item = StringToItemParser::getInstance()->parse($itemData['id'] . ":" . $itemData['meta'])->setNamedTag($tags);
+                        } else {
+                            $item = StringToItemParser::getInstance()->parse($itemData['id'] . ":" . $itemData['meta']);
+                        }
+                    } catch (LegacyStringToItemParserException $e) {
+                        $this->getLogger()->error($e->getMessage());
+                    }
+                }
                 if (isset($itemData["name"])) $item->setCustomName($itemData["name"]);
                 if (isset($itemData["lore"])) $item->setLore(explode("\n", $itemData["lore"]));
                 if (isset($itemData["enchantments"])) foreach ($itemData["enchantments"] as $enchantmentData) {

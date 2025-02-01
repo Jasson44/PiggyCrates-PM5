@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace DaPigGuy\PiggyCrates;
 
 use DaPigGuy\PiggyCrates\tiles\CrateTile;
-use pocketmine\block\BlockLegacyIds;
+use pocketmine\block\BlockTypeIds;
 use pocketmine\block\tile\Chest;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
-use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\StringTag;
 
 class EventListener implements Listener
 {
@@ -25,7 +23,7 @@ class EventListener implements Listener
         $world = $block->getPosition()->getWorld();
         $item = $player->getInventory()->getItemInHand();
 
-        if ($block->getId() === BlockLegacyIds::CHEST) {
+        if ($block->getTypeId() === BlockTypeIds::CHEST) {
             $tile = $world->getTile($block->getPosition());
             if ($tile instanceof CrateTile) {
                 if ($tile->getCrateType() === null) {

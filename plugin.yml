@@ -1,10 +1,11 @@
 name: PiggyCrates
 main: DaPigGuy\PiggyCrates\PiggyCrates
-version: 3.0.4
-api: 4.0.0
+version: 3.0.5
+api: 5.0.0
 load: POSTWORLD
 author: DaPigGuy
-softdepend: ["PiggyCustomEnchants"]
+authors: [ 'Jasson44' ]
+softdepend: [ "PiggyCustomEnchants" ]
 website: "https://github.com/DaPigGuy/PiggyCrates/"
 permissions:
   piggycrates:

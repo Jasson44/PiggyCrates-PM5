@@ -1,7 +1,38 @@
-# PiggyCrates [![Poggit-CI](https://poggit.pmmp.io/shield.dl/PiggyCrates)](https://poggit.pmmp.io/p/PiggyCrates) [![Discord](https://img.shields.io/discord/330850307607363585?logo=discord)](https://discord.gg/qmnDsSD)
+# PiggyCrates PM5 Fork
+
+[![Poggit-CI](https://poggit.pmmp.io/shield.dl/PiggyCrates)](https://poggit.pmmp.io/p/PiggyCrates) [![Discord](https://img.shields.io/discord/330850307607363585?logo=discord)](https://discord.gg/qmnDsSD)
 
 PiggyCrates is a simple and customizable crates plugin, supporting an unlimited amount of crate types. It also supports
 vanilla and custom enchants, such as [PiggyCustomEnchants](https://github.com/DaPigGuy/PiggyCustomEnchants/).
+
+## List Update
+
+You can use the item ID or item Name in `crate.yml`<br>
+example
+
+```yaml
+crates:
+  Common:
+    drops:
+      - id: 1
+        meta: 0
+        amount: 16
+        chance: 25
+      - id: 263
+        meta: 0
+        amount: 10
+        chance: 75
+      - id: minecraft
+        meta: apple
+        amount: 32
+        chance: 75
+      - id: minecraft
+        meta: wheat
+        amount: 32
+        chance: 75
+```
+
+**You need to remember that if you want to use a name, make sure id is `minecraft` and meta is `item name`**
 
 ## Prerequisites
 
@@ -96,21 +127,21 @@ vanilla and custom enchants, such as [PiggyCustomEnchants](https://github.com/Da
 
 ## Commands
 
-| Command | Description | Permissions | Aliases
-| --- | --- | --- | --- |
-| `/crate <crate>` | Changes a chest to a crate by tapping | `piggycrates.command.crate` | N/A |
-| `/key` | Gives a player a specific crate key | `piggycrates.command.key` | N/A |
-| `/keyall` | Gives all online players a specific crate key | `piggycrates.command.keyall` | N/A |
+| Command          | Description                                   | Permissions                  | Aliases 
+|------------------|-----------------------------------------------|------------------------------|---------|
+| `/crate <crate>` | Changes a chest to a crate by tapping         | `piggycrates.command.crate`  | N/A     |
+| `/key`           | Gives a player a specific crate key           | `piggycrates.command.key`    | N/A     |
+| `/keyall`        | Gives all online players a specific crate key | `piggycrates.command.keyall` | N/A     |
 
 ## Permissions
 
-| Permissions | Description | Default |
-| --- | --- | --- |
-| `piggycrates` | Allows usage of all PiggyCrates features | `false` |
-| `piggycrates.command` | Allow usage of all PiggyCrates commands | `op` |
-| `piggycrates.command.crate` | Allow usage of all /crate commands | `op` |
-| `piggycrates.command.key` | Allow usage of the /key command | `op` |
-| `piggycrates.command.keyall` | Allow usage of the /keyall command | `op` |
+| Permissions                  | Description                              | Default |
+|------------------------------|------------------------------------------|---------|
+| `piggycrates`                | Allows usage of all PiggyCrates features | `false` |
+| `piggycrates.command`        | Allow usage of all PiggyCrates commands  | `op`    |
+| `piggycrates.command.crate`  | Allow usage of all /crate commands       | `op`    |
+| `piggycrates.command.key`    | Allow usage of the /key command          | `op`    |
+| `piggycrates.command.keyall` | Allow usage of the /keyall command       | `op`    |
 
 ## Issue Reporting
 
